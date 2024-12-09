@@ -1,2 +1,8 @@
 # JetBrains project files
 .idea
+
+# Ignore project cache
+**/node_modules/
+
+# Ignore demo project
+**/introdemo/
