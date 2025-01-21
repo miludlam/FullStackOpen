@@ -7,22 +7,18 @@ const App = () => {
     ])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
+    const [personFilter, setPersonFilter] = useState('')
 
     const addPerson = (event) => {
         event.preventDefault()
         const personObject = { name: newName, number: newNumber }
 
-        let nameFound = false
+        const matches = persons.filter((person) => person.name === newName)
 
-        persons.forEach((person) => {
-            if (person.name === newName) {
-                alert(newName + ' is already in phonebook')
-                nameFound = true
-            }
-        })
-
-        if (!nameFound) {
+        if (matches.length === 0) {
             setPersons(persons.concat(personObject))
+        } else {
+            alert(newName + ' is already in phonebook')
         }
         setNewName('')
         setNewNumber('')
@@ -36,9 +32,21 @@ const App = () => {
         setNewNumber(event.target.value)
     }
 
+    const handleNameFilter = (event) => {
+        setPersonFilter(event.target.value)
+    }
+
+    const filteredPersons = persons.filter((person) =>
+        person.name.toLowerCase().includes(personFilter.toLowerCase())
+    )
+
     return (
         <div>
             <h2>Phonebook</h2>
+            <div>
+                filter shown with <input value={personFilter} onChange={handleNameFilter} />
+            </div>
+            <h3>Add a new</h3>
             <form onSubmit={addPerson}>
                 <div>
                     name: <input value={newName} onChange={handleNameChange} />
@@ -50,9 +58,9 @@ const App = () => {
                     <button type="submit">add</button>
                 </div>
             </form>
-            <h2>Numbers</h2>
+            <h3>Numbers</h3>
             <div>
-                {persons.map(person =>
+                {filteredPersons.map(person =>
                     <Person key={person.name} person={person} />
                 )}
             </div>
